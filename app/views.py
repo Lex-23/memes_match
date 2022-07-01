@@ -11,7 +11,7 @@ def add_user():
     name = request.json['name']
     city = request.json['city']
     info = request.json['info']
-    email = request.json['info']
+    email = request.json['email']
     password = request.json['password']
 
     new_user = User(name, city, info, email, password)
@@ -42,7 +42,7 @@ def update_user(pk):
     name = request.json['name']
     city = request.json['city']
     info = request.json['info']
-    email = request.json['info']
+    email = request.json['email']
     password = request.json['password']
 
     user.name = name

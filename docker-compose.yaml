@@ -5,7 +5,7 @@ services:
     image: mysql
     restart: always
     volumes:
-      - db_store_memes:/var/lib/mysql_new
+      - db_store_memes:/var/lib/mysql_volume_memes_match
     env_file:
       - .env
     ports:
