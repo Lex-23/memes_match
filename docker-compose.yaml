@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - db_store_memes:/var/lib/mysql_volume_memes_match
+    env_file:
+      - .env
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+
+volumes:
+  db_store_memes:
