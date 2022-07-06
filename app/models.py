@@ -14,6 +14,7 @@ class User(db.Model):
     info = db.Column(db.String(300))
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+
     meme_grades = db.relationship('MemeGrade', backref='user', passive_deletes=True)
 
     def __init__(self, name, city, info, email, password):
@@ -33,6 +34,7 @@ class Meme(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(300), unique=True, nullable=False)
     title = db.Column(db.String(300))
+
     meme_grades = db.relationship('MemeGrade', backref='meme', passive_deletes=True)
 
     def __init__(self, url, title):
