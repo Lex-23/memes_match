@@ -1,0 +1,46 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST API
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+# Paths supported by the server application
+paths:
+  /users:
+    get:
+      operationId: app.views.get_users
+      tags:
+        - Users
+      summary: Read the entire set of users, sorted by city
+      description: Read the entire set of users, sorted by city
+      responses:
+        200:
+          description: Successful retrieve users list operation
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: string
+                  description: Id of the user
+                name:
+                  type: string
+                  description: Name of the user
+                city:
+                  type: string
+                  description: City of the user
+                info:
+                  type: string
+                  description: Info about the user
+                email:
+                  type: string
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password

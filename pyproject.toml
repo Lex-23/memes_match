@@ -13,6 +13,7 @@ marshmallow-sqlalchemy = "^0.28.0"
 PyMySQL = "^1.0.2"
 cryptography = "^37.0.3"
 Flask-Migrate = "^3.1.0"
+connexion = {extras = ["swagger-ui"], version = "^2.14.0"}
 
 [tool.poetry.dev-dependencies]
 

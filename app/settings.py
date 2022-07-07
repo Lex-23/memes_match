@@ -1,12 +1,19 @@
-from flask import Flask
 import os
-from app.models import db
-from app.serializers import ma
-from app.views import routes
+import connexion
 from flask_migrate import Migrate
 
-app = Flask(__name__)
+from app.models import db, ma
+from app.views import routes
+
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+# app = Flask(__name__)
+connex_app = connexion.App(__name__, specification_dir=basedir)
+connex_app.add_api("swagger.yml")
+
+app = connex_app.app
+app.register_blueprint(routes)
+
 
 # db settings
 DB_PASSWORD = os.environ["MYSQL_PASSWORD"]
@@ -15,11 +22,10 @@ DB_USER = os.environ["MYSQL_USER"]
 DB_PORT = os.environ["MYSQL_PORT"]
 app.config["SQLALCHEMY_DATABASE_URI"] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@localhost:{DB_PORT}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
-migrate = Migrate(app, db)
 
 ma.init_app(app)
 
-# app routing
-app.register_blueprint(routes)
+migrate = Migrate(app, db)

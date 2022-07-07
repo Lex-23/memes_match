@@ -1,8 +1,11 @@
+from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 
 from app.utils import GradeEnum
 
+
 db = SQLAlchemy()
+ma = Marshmallow()
 
 
 class User(db.Model):
@@ -28,6 +31,16 @@ class User(db.Model):
         return f'User: {self.name} - #{self.id}'
 
 
+class UserSchema(ma.Schema):
+    class Meta:
+        model = User
+        sqla_session = db.session
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+
+
 class Meme(db.Model):
     __tablename__ = 'meme'
 
@@ -43,6 +56,14 @@ class Meme(db.Model):
 
     def __repr__(self):
         return f'Meme #{self.id}: {self.url}'
+
+
+class MemeSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'url', 'title')
+
+
+meme_schema = MemeSchema()
 
 
 class MemeGrade(db.Model):
