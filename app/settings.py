@@ -3,7 +3,6 @@ import connexion
 from flask_migrate import Migrate
 
 from app.models import db, ma
-from app.views import routes
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,7 +11,7 @@ connex_app = connexion.App(__name__, specification_dir=basedir)
 connex_app.add_api("swagger.yml")
 
 app = connex_app.app
-app.register_blueprint(routes)
+app.app_context().push()
 
 
 # db settings
