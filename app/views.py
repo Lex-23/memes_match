@@ -1,6 +1,7 @@
 from flask import abort, make_response
-from app.settings import db
+
 from app.models import User, user_schema, users_schema
+from app.settings import db
 
 
 def create_user(user):
@@ -12,11 +13,9 @@ def create_user(user):
     :return:  201 on success, 409 on user exists
     """
 
-    email = user.get('email')
+    email = user.get("email")
 
-    existing_user = (
-        User.query.filter(User.email == email).one_or_none()
-    )
+    existing_user = User.query.filter(User.email == email).one_or_none()
 
     if existing_user is None:
         new_user = user_schema.load(user, session=db.session)
@@ -56,10 +55,7 @@ def get_user(user_id):
         data = user_schema.dump(user)
         return data
     else:
-        abort(
-            404,
-            f"User with Id:{user_id} doesn't exist"
-        )
+        abort(404, f"User with Id:{user_id} doesn't exist")
 
 
 def update_user(user_id, user):
