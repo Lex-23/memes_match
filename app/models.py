@@ -71,10 +71,11 @@ class MemeGrade(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-    user = db.relationship("User", backref="meme_grades")
     meme_id = db.Column(db.Integer, db.ForeignKey('meme.id', ondelete="CASCADE"), nullable=False)
-    meme = db.relationship("Meme", backref="meme_grades")
     grade = db.Column(db.String(10), db.Enum(GradeEnum), nullable=False)
+
+    meme = db.relationship("Meme", backref="meme_grades")
+    user = db.relationship("User", backref="meme_grades")
 
     def __init__(self, user_id, meme_id, grade):
         self.user_id = user_id
