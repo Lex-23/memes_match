@@ -1,6 +1,6 @@
 from flask import abort, make_response
 
-from app.models import User, user_schema, users_schema
+from app.models import Meme, User, meme_schema, user_schema, users_schema
 from app.settings import db
 
 
@@ -71,7 +71,7 @@ def update_user(user_id, user):
     target_user = User.query.filter(User.id == user_id).one_or_none()
 
     if target_user is None:
-        abort(404, f"User didn't find for Id:{user_id}")
+        abort(404, f"User wasn't found for Id:{user_id}")
 
     else:
         update = user_schema.load(user, session=db.session)
@@ -101,4 +101,46 @@ def delete_user(user_id):
         return make_response(f"User Id:{user_id} deleted")
 
     else:
-        abort(404, f"User didn't find for ID:{user_id}")
+        abort(404, f"User wasn't found for ID:{user_id}")
+
+
+def create_meme(meme):
+
+    url = meme.get("url")
+
+    existing_meme = Meme.query.filter(Meme.url == url).one_or_none()
+
+    if existing_meme is None:
+        new_meme = meme_schema.load(meme, session=db.session)
+        db.session.add(new_meme)
+        db.session.commit()
+        data = meme_schema.dump(new_meme)
+
+        return data, 201
+
+    else:
+        abort(409, f"Meme with url {url} already exists")
+
+
+def get_meme(meme_id):
+
+    meme = Meme.query.filter(Meme.id == meme_id).one_or_none()
+
+    if meme is not None:
+        data = meme_schema.dump(meme)
+        return data
+    else:
+        abort(404, f"Meme with Id:{meme_id} doesn't exist")
+
+
+def delete_meme(meme_id):
+
+    meme = Meme.query.filter(Meme.id == meme_id).one_or_none()
+
+    if meme is not None:
+        db.session.delete(meme)
+        db.session.commit()
+        return make_response(f"Meme Id:{meme_id} deleted")
+
+    else:
+        abort(404, f"Meme wasn't found for ID:{meme_id}")

@@ -212,3 +212,87 @@ paths:
       responses:
         200:
           description: Successfully deleted a user
+
+  /meme:
+    post:
+      operationId: app.views.create_meme
+      tags:
+        - Meme
+      summary: Create a meme
+      description: Create a new meme
+      parameters:
+        - name: meme
+          in: body
+          description: Meme to create
+          required: True
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Id of the meme
+              url:
+                type: string
+                description: Url for the meme
+              title:
+                type: string
+                description: Title for the meme
+      responses:
+        201:
+          description: Successfully created meme
+          schema:
+            properties:
+              id:
+                type: integer
+                description: Id of the meme
+              url:
+                type: string
+                description: Url for the meme
+              title:
+                type: string
+                description: Title for the meme
+
+
+  /meme/{meme_id}:
+    get:
+      operationId: app.views.get_meme
+      tags:
+        - Meme
+      summary: Read one meme
+      description: Read one meme
+      parameters:
+        - name: meme_id
+          in: path
+          description: Id of the meme to get
+          type: integer
+          required: True
+      responses:
+        200:
+          description: Successful retrieve meme
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Id of the meme
+              url:
+                type: string
+                description: Url for the meme
+              title:
+                type: string
+                description: Title for the meme
+    delete:
+      operationId: app.views.delete_meme
+      tags:
+        - Meme
+      summary: Delete a meme from the memes list
+      description: Delete a meme
+      parameters:
+        - name: meme_id
+          in: path
+          type: integer
+          description: Id of the meme to delete
+          required: true
+      responses:
+        200:
+          description: Successfully deleted a meme
