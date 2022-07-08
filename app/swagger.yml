@@ -1,0 +1,214 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger REST API
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+paths:
+  /users:
+    get:
+      operationId: app.views.get_users
+      tags:
+        - Users
+      summary: Read the entire set of users, sorted by city
+      description: Read the entire set of users, sorted by city
+      responses:
+        200:
+          description: Successful retrieve users list operation
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                  description: Id of the user
+                name:
+                  type: string
+                  description: Name of the user
+                city:
+                  type: string
+                  description: City of the user
+                info:
+                  type: string
+                  description: Info about the user
+                email:
+                  type: string
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
+
+    post:
+      operationId: app.views.create_user
+      tags:
+        - Users
+      summary: Create a user
+      description: Create a new user
+      parameters:
+        - name: user
+          in: body
+          description: User to create
+          required: True
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Id of the user
+              name:
+                type: string
+                description: Name of the user
+              city:
+                type: string
+                description: City of the user
+              info:
+                type: string
+                description: Info about the user
+              email:
+                type: string
+                description: User's email
+              password:
+                type: string
+                description: User's password
+      responses:
+        201:
+          description: Successfully created user
+          schema:
+            properties:
+              id:
+                type: integer
+                description: Id of the user
+              name:
+                type: string
+                description: Name of the user
+              city:
+                type: string
+                description: City of the user
+              info:
+                type: string
+                description: Info about the user
+              email:
+                type: string
+                description: User's email
+              password:
+                type: string
+                description: User's password
+
+  /user/{user_id}:
+    get:
+      operationId: app.views.get_user
+      tags:
+        - User
+      summary: Read one user
+      description: Read one user
+      parameters:
+        - name: user_id
+          in: path
+          description: Id of the user to get
+          type: integer
+          required: True
+      responses:
+        200:
+          description: Successful retrieve user from users data operation
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Id of the user
+              name:
+                type: string
+                description: Name of the user
+              city:
+                type: string
+                description: City of the user
+              info:
+                type: string
+                description: Info about the user
+              email:
+                type: string
+                description: User's email
+              password:
+                type: string
+                description: User's password
+
+    put:
+      operationId: app.views.update_user
+      tags:
+        - User
+      summary: Update a user
+      description: Update a user
+      parameters:
+        - name: user_id
+          in: path
+          description: Id the user to update
+          type: integer
+          required: True
+        - name: user
+          in: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: Id of the user
+              name:
+                type: string
+                description: Name of the user
+              city:
+                type: string
+                description: City of the user
+              info:
+                type: string
+                description: Info about the user
+              email:
+                type: string
+                description: User's email
+              password:
+                type: string
+                description: User's password
+      responses:
+        200:
+          description: Successfully updated user
+          schema:
+            properties:
+              id:
+                type: integer
+                description: Id of the user
+              name:
+                type: string
+                description: Name of the user
+              city:
+                type: string
+                description: City of the user
+              info:
+                type: string
+                description: Info about the user
+              email:
+                type: string
+                description: User's email
+              password:
+                type: string
+                description: User's password
+
+    delete:
+      operationId: app.views.delete_user
+      tags:
+        - User
+      summary: Delete a user from the users list
+      description: Delete a user
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          description: Id of the user to delete
+          required: true
+      responses:
+        200:
+          description: Successfully deleted a user

@@ -1,12 +1,14 @@
+from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 
 from app.utils import GradeEnum
 
 db = SQLAlchemy()
+ma = Marshmallow()
 
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -14,8 +16,6 @@ class User(db.Model):
     info = db.Column(db.String(300))
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-
-    meme_grades = db.relationship('MemeGrade', backref='user', passive_deletes=True)
 
     def __init__(self, name, city, info, email, password):
         self.name = name
@@ -25,36 +25,60 @@ class User(db.Model):
         self.password = password
 
     def __repr__(self):
-        return f'User: {self.name} - #{self.id}'
+        return f"User: {self.name} - #{self.id}"
+
+
+class UserSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+        include_relationships = True
+        load_instance = True
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 
 class Meme(db.Model):
-    __tablename__ = 'meme'
+    __tablename__ = "meme"
 
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(300), unique=True, nullable=False)
     title = db.Column(db.String(300))
-
-    meme_grades = db.relationship('MemeGrade', backref='meme', passive_deletes=True)
 
     def __init__(self, url, title):
         self.url = url
         self.title = title
 
     def __repr__(self):
-        return f'Meme #{self.id}: {self.url}'
+        return f"Meme #{self.id}: {self.url}"
+
+
+class MemeSchema(ma.Schema):
+    class Meta:
+        fields = ("id", "url", "title")
+
+
+meme_schema = MemeSchema()
 
 
 class MemeGrade(db.Model):
-    __tablename__ = 'meme_grade'
+    __tablename__ = "meme_grade"
     __table_args__ = (
-        db.UniqueConstraint('user_id', 'meme_id', name='unique_together_user_meme'),
+        db.UniqueConstraint("user_id", "meme_id", name="unique_together_user_meme"),
     )
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False)
-    meme_id = db.Column(db.Integer, db.ForeignKey('meme.id', ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False
+    )
+    meme_id = db.Column(
+        db.Integer, db.ForeignKey("meme.id", ondelete="CASCADE"), nullable=False
+    )
     grade = db.Column(db.String(10), db.Enum(GradeEnum), nullable=False)
+
+    meme = db.relationship("Meme", backref="meme_grades")
+    user = db.relationship("User", backref="meme_grades")
 
     def __init__(self, user_id, meme_id, grade):
         self.user_id = user_id
@@ -62,4 +86,4 @@ class MemeGrade(db.Model):
         self.grade = grade
 
     def __repr__(self):
-        return f'Meme #{self.meme_id} - User #{self.user_id} - Grade: {self.grade}'
+        return f"Meme #{self.meme_id} - User #{self.user_id} - Grade: {self.grade}"
