@@ -54,12 +54,15 @@ class Meme(db.Model):
         return f"Meme #{self.id}: {self.url}"
 
 
-class MemeSchema(ma.Schema):
+class MemeSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        fields = ("id", "url", "title")
+        model = Meme
+        include_relationships = True
+        load_instance = True
 
 
 meme_schema = MemeSchema()
+memes_schema = MemeSchema(many=True)
 
 
 class MemeGrade(db.Model):
