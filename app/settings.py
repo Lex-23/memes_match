@@ -13,6 +13,7 @@ connex_app.add_api("swagger.yml")
 
 app = connex_app.app
 app.app_context().push()
+app.config["SECRET_KEY"] = os.environ["APP_SECRET_KEY"]
 
 
 # db settings
